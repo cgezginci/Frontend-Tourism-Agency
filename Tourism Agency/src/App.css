@@ -1,0 +1,175 @@
+.home {
+  background-image: url("./assets/0.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.header-section {
+  width: 100%;
+  height: 94vh;
+}
+
+#menu {
+  display: flex;
+  justify-content: space-around;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  height: 80px;
+  background-color: #0d78cd;
+}
+
+.menu-btn,
+.menu-icon {
+  display: none;
+}
+
+.nav-img {
+  margin-top: -24px;
+}
+
+.nav-img img {
+  width: 130px;
+  height: 130px;
+}
+
+.nav-menu {
+  margin-right: 50px;
+  margin-top: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  gap: 40px;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #080808;
+}
+
+.content {
+  position: absolute;
+  top: 12%;
+  margin-left: 240px;
+  color: #f8f9fa;
+  width: 45%;
+  margin-top: 100px;
+  opacity: 1;
+}
+
+.content h1 {
+  font-size: 70px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  width: 50%;
+  color: #041220;
+}
+
+.content p {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(20, 20, 20);
+}
+
+.top-content {
+  background-color: #315592;
+  border-radius: 5px;
+  padding: 3px 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.st-button {
+  background-color: #315592;
+  border-radius: 5px;
+  padding: 7px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  border: 1px solid #315592;
+  transition: 0.3s;
+  color: #fefefe;
+}
+
+.nd-button {
+  border-radius: 5px;
+  padding: 7px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  border: 1px solid #fefefe;
+  transition: 0.3s;
+  color: #fefefe;
+  margin-left: 50px;
+  background-color: #f9bc0d;
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  gap: 10px;
+  color: #fefefe;
+}
+
+.content button:hover {
+  cursor: pointer;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.card {
+  background-color: #ffffff;
+  border: none;
+  padding: 15px;
+  text-align: center;
+  height: 65%;
+  width: 15%;
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+}
+
+.card h2 {
+  color: #315592;
+  font-size: 25px;
+}
+
+.card p {
+  color: #000000;
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: bold;
+  height: 6rem;
+}
+
+.left {
+  padding: 20px;
+  margin-top: 70px;
+  margin-right: 20px;
+  width: 300px;
+}
+
+.left h2 {
+  color: #315592;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.left p {
+  color: #000000;
+  font-size: 18px;
+  font-weight: bold;
+}
