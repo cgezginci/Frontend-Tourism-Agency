@@ -1,0 +1,77 @@
+/* Stil dosyası */
+.hotel {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.hotel-info {
+  margin-bottom: 10px;
+}
+
+.hotel-info span {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.hotel-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.hotel-address {
+  font-style: italic;
+}
+
+.hotel-contact {
+  font-size: 14px;
+}
+
+.facilities,
+.hostels {
+  margin-top: 10px;
+}
+
+.facility,
+.hostel {
+  display: inline-block;
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+/* Hotel Container */
+
+.secondary-container {
+  display: flex;
+  gap: 20px;
+}
+
+.hostel-container {
+  background-color: #d9f4dc;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.hostel-info {
+  margin-bottom: 10px;
+}
+
+/* Facility Container */
+.facility-container {
+  background-color: #fbe1a4;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.facility-info {
+  margin-bottom: 10px;
+}
