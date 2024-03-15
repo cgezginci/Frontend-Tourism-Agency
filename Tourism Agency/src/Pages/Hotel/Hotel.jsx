@@ -12,15 +12,16 @@ function Hotel() {
   if (status === "error") {
     return <div>Error: {error.message}</div>;
   }
+  console.log(data?.data?.data);
   return (
     <div>
-      {data.data.data.map((hotel) => {
+      {/* {data.data.data.map((hotel) => {
         return (
           <div key={hotel.id}>
             <h1>{hotel.name}</h1>
           </div>
         );
-      })}
+      })} */}
     </div>
   );
 }
