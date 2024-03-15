@@ -43,3 +43,16 @@
 .room-feature-info {
   margin-bottom: 10px;
 }
+
+.roomFeatures {
+  margin-top: 10px;
+}
+
+.roomFeature {
+  display: inline-block;
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+}

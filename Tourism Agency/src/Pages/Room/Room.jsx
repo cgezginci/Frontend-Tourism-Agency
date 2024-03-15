@@ -35,6 +35,16 @@ function Room() {
                 Period: {room.periodStart} - {room.periodEnd}
               </span>
               <span>Price: {room.price}</span>
+              {room.roomFeatures && (
+                <div className="roomFeatures">
+                  <h4>Room Features:</h4>
+                  {room.roomFeatures.map((roomFeature, index) => (
+                    <div key={index} className="roomFeature">
+                      <span>{roomFeature.name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
               <span>Hotel Name: {room.hotelName}</span>
             </div>
           </div>
