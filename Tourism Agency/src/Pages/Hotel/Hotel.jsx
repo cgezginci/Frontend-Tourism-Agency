@@ -1,10 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getHotels } from "../../API/Hotel";
 import { getHostels } from "../../API/Hostel";
 import { getFacilities } from "../../API/Facility";
 import "./Hotel.css";
 
 function Hotel() {
+  // refetch için kullanılır
+  const queryClient = useQueryClient();
+
   const hotelQuery = useQuery({
     queryKey: ["hotels"],
     queryFn: getHotels,
@@ -19,6 +22,15 @@ function Hotel() {
     queryKey: ["facilities"],
     queryFn: getFacilities,
   });
+
+  const handleUpdate = () => {
+    // Aynı jsx içinde
+    hotelQuery.refetch();
+    hostelQuery.refetch();
+    facilityQuery.refetch();
+    // global query key ile
+    queryClient.invalidateQueries("hotels", "hostels", "facilities");
+  };
 
   return (
     <div className="hotel-container">
