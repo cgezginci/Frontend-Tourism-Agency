@@ -9,24 +9,6 @@ function Hotel() {
     queryKey: ["hotels"],
     queryFn: getHotels,
   });
-<<<<<<< HEAD
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-  if (status === "error") {
-    return <div>Error: {error.message}</div>;
-  }
-  console.log(data?.data?.data);
-  return (
-    <div>
-      {/* {data.data.data.map((hotel) => {
-        return (
-          <div key={hotel.id}>
-            <h1>{hotel.name}</h1>
-          </div>
-        );
-      })} */}
-=======
 
   const hostelQuery = useQuery({
     queryKey: ["hostels"],
@@ -95,7 +77,6 @@ function Hotel() {
           ))}
         </div>
       </div>
->>>>>>> refs/remotes/origin/main
     </div>
   );
 }
