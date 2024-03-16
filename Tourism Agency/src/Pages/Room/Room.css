@@ -1,6 +1,9 @@
-/* Room Container */
-
-/* Room */
+.rooms {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
 .room {
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -55,4 +58,67 @@
   padding: 5px 10px;
   border-radius: 5px;
   margin-right: 5px;
+}
+
+.add-room-container {
+  margin-top: 20px;
+}
+
+.add-room-container h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.add-room-container input[type="text"],
+.add-room-container input[type="date"],
+.add-room-container input[type="number"],
+.add-room-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.add-room-container button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-room-container button:hover {
+  background-color: #0056b3;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Seçili olan checkboxların görünümünü değiştir */
+input[type="checkbox"]:checked + label::before {
+  content: "\2714"; /* ✅ işaretinin unicode değeri */
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 14px;
+  color: #27ae60; /* Seçili renk */
+}
+
+/* Checkbox label stilini ayarla */
+input[type="checkbox"] + label::before {
+  content: "\2714"; /* ✅ işaretinin unicode değeri */
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 14px;
+  color: #ccc; /* Varsayılan renk */
+  cursor: pointer;
+}
+
+/* Checkbox label hover efekti */
+input[type="checkbox"] + label:hover::before {
+  color: #555; /* Hover rengi */
 }

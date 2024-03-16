@@ -1,4 +1,10 @@
-/* Stil dosyası */
+.hotels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
 .hotel {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -74,4 +80,67 @@
 
 .facility-info {
   margin-bottom: 10px;
+}
+
+.add-hotel-container {
+  margin-top: 20px;
+}
+
+.add-hotel-container h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.add-hotel-container input[type="text"],
+.add-hotel-container input[type="date"],
+.add-hotel-container input[type="number"],
+.add-hotel-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.add-hotel-container button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-hotel-container button:hover {
+  background-color: #0056b3;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Seçili olan checkboxların görünümünü değiştir */
+input[type="checkbox"]:checked + label::before {
+  content: "\2714"; /* ✅ işaretinin unicode değeri */
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 14px;
+  color: #27ae60; /* Seçili renk */
+}
+
+/* Checkbox label stilini ayarla */
+input[type="checkbox"] + label::before {
+  content: "\2714"; /* ✅ işaretinin unicode değeri */
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 14px;
+  color: #ccc; /* Varsayılan renk */
+  cursor: pointer;
+}
+
+/* Checkbox label hover efekti */
+input[type="checkbox"] + label:hover::before {
+  color: #555; /* Hover rengi */
 }

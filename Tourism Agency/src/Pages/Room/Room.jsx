@@ -1,22 +1,26 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getRooms } from "../../API/Room";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getRooms, addRoom, deleteRoom } from "../../API/Room";
 import { getRoomTypes } from "../../API/RoomTypes";
 import { getRoomFeatures } from "../../API/RoomFeatures";
+import { getHotels } from "../../API/Hotel";
 import "./Room.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function Room() {
+  const queryClient = useQueryClient();
   const [newRoom, setNewRoom] = useState({
-    roomType: { id: "" },
-    stock: "",
-    squareMeter: "",
+    roomType: {},
+    stock: 0,
+    squareMeter: 0,
     personType: "",
-    bedNumber: "",
+    bedNumber: 0,
     periodStart: "",
     periodEnd: "",
-    price: "",
+    price: 0,
     roomFeatures: [],
-    hotel: { id: "" },
+    hotel: {},
   });
 
   const roomQuery = useQuery({
@@ -34,67 +38,174 @@ function Room() {
     queryFn: getRoomFeatures,
   });
 
-  const handleAddRoom = () => {};
+  const hotelQuery = useQuery({
+    queryKey: ["hotels"],
+    queryFn: getHotels,
+  });
+
+  const handleAddRoom = (event) => {
+    setNewRoom({
+      ...newRoom,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleAddButton = () => {
+    addRoom(newRoom).then((response) => {
+      if (response.status === 201) {
+        queryClient.invalidateQueries("rooms").then(() => {});
+      }
+      setNewRoom({
+        roomType: {},
+        stock: 0,
+        squareMeter: 0,
+        personType: "",
+        bedNumber: 0,
+        periodStart: "",
+        periodEnd: "",
+        price: 0,
+        roomFeatures: [],
+        hotel: {},
+      });
+      document
+        .querySelectorAll('input[type="checkbox"]')
+        .forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+    });
+  };
+
+  const handleAddRoomFeature = (event) => {
+    if (event.target.checked) {
+      setNewRoom({
+        ...newRoom,
+        roomFeatures: [...newRoom.roomFeatures, event.target.value],
+      });
+    } else {
+      setNewRoom({
+        ...newRoom,
+        roomFeatures: newRoom.roomFeatures.filter(
+          (facility) => facility !== event.target.value
+        ),
+      });
+    }
+  };
+
+  const handleDeleteButton = (event) => {
+    const id = event.currentTarget.id;
+    deleteRoom(id).then((response) => {
+      if (response.status === 200) {
+        queryClient.invalidateQueries("rooms").then(() => {});
+      }
+    });
+  };
 
   return (
     <div className="room-container">
-      <div>
+      <div className="add-room-container">
         <h3>Room Add</h3>
         <div>
-          <select name="" id="">
-            <option value="">Select A Type</option>
+          <select
+            name="roomType"
+            required
+            value={newRoom.roomType.id || ""}
+            onChange={(e) =>
+              setNewRoom({
+                ...newRoom,
+                roomType: { id: e.target.value },
+              })
+            }
+          >
+            <option value="" disabled>
+              Bir oda tipi seçiniz
+            </option>
             {roomTypeQuery.data?.data?.data.map((roomType) => (
               <option key={roomType.id} value={roomType.id}>
                 {roomType.name}
               </option>
             ))}
           </select>
-          <input type="text" placeholder="Stock" />
-          <input type="text" placeholder="Square Meter" />
-          <input type="text" placeholder="Person Type" />
-          <input type="text" placeholder="Bed Number" />
-          <input type="date" />
-          <input type="date" />
-          <input type="text" placeholder="Price" />
+          <input
+            type="number"
+            placeholder="Stock"
+            name="stock"
+            value={newRoom.stock}
+            onChange={handleAddRoom}
+          />
+          <input
+            type="number"
+            placeholder="Square Meter"
+            name="squareMeter"
+            value={newRoom.squareMeter}
+            onChange={handleAddRoom}
+          />
+          <input
+            type="text"
+            placeholder="Person Type"
+            name="personType"
+            value={newRoom.personType}
+            onChange={handleAddRoom}
+          />
+          <input
+            type="number"
+            placeholder="Bed Number"
+            name="bedNumber"
+            value={newRoom.bedNumber}
+            onChange={handleAddRoom}
+          />
+          <input
+            type="date"
+            name="periodStart"
+            value={newRoom.periodStart}
+            onChange={handleAddRoom}
+          />
+          <input
+            type="date"
+            name="periodEnd"
+            value={newRoom.periodEnd}
+            onChange={handleAddRoom}
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            name="price"
+            value={newRoom.price}
+            onChange={handleAddRoom}
+          />
           <div>
+            <h4>Room Features</h4>
             {roomFeatureQuery.data?.data?.data.map((roomFeature) => (
-              <label key={roomFeature.id} htmlFor="">
+              <div key={roomFeature.id}>
                 <input
                   type="checkbox"
-                  checked={newRoom.roomFeatures.some(
-                    (feature) => feature.id === roomFeature.id
-                  )}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setNewRoom({
-                        ...newRoom,
-                        roomFeatures: [
-                          ...newRoom.roomFeatures,
-                          { id: roomFeature.id },
-                        ],
-                      });
-                    } else {
-                      setNewRoom({
-                        ...newRoom,
-                        roomFeatures: newRoom.roomFeatures.filter(
-                          (roomFeature) => roomFeature.id !== roomFeature.id
-                        ),
-                      });
-                    }
-                  }}
+                  name="facilities"
+                  value={roomFeature.id}
+                  onChange={handleAddRoomFeature}
                 />
-                {roomFeature.name}
-              </label>
+                <label>{roomFeature.name}</label>
+              </div>
             ))}
           </div>
-          <select name="" id="">
-            <option value="">Select An Hotel</option>
-            {roomQuery.data?.data?.data.map((room) => (
-              <option key={room.id} value={room.id}>
-                {room.hotelName}
+          <select
+            name="hotel"
+            required
+            value={newRoom.hotel.id || ""}
+            onChange={(e) =>
+              setNewRoom({
+                ...newRoom,
+                hotel: { id: e.target.value },
+              })
+            }
+          >
+            <option value="" disabled>
+              Select a hotel
+            </option>
+            {hotelQuery.data?.data?.data.map((hotel) => (
+              <option key={hotel.id} value={hotel.id}>
+                {hotel.name}
               </option>
             ))}
           </select>
+          <button onClick={handleAddButton}>Add</button>
         </div>
       </div>
       <div className="rooms">
@@ -121,6 +232,9 @@ function Room() {
                 </div>
               )}
               <span>Hotel Name: {room.hotelName}</span>
+              <span onClick={handleDeleteButton} id={room.id}>
+                <FontAwesomeIcon icon={faTrash} className="delete-icon" />
+              </span>
             </div>
           </div>
         ))}
