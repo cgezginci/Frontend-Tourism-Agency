@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getRooms, addRoom, deleteRoom } from "../../API/Room";
+import { getRooms, addRoom, deleteRoom, updateRoomFunc } from "../../API/Room";
 import { getRoomTypes } from "../../API/RoomTypes";
 import { getRoomFeatures } from "../../API/RoomFeatures";
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
@@ -46,6 +46,11 @@ function Room() {
       type: "select",
       selectText: "Select a hotel",
       options: "hotelQuery",
+    },
+    {
+      siteName: "Actions",
+      dbName: "actions",
+      type: "icon",
     },
   ];
   const queryClient = useQueryClient();
@@ -131,6 +136,7 @@ function Room() {
   };
 
   const handleDeleteButton = (event) => {
+    event.stopPropagation();
     const id = event.currentTarget.id;
     deleteRoom(id).then((response) => {
       if (response.status === 200) {
@@ -140,16 +146,28 @@ function Room() {
   };
 
   const handleUpdateBtn = (id) => {
-    console.log(id);
-    const newObj = roomQuery.data?.data?.data.find(
-      (room) => room.id === parseInt(id)
+    const roomToUpdate = roomQuery.data?.data?.data.find(
+      (room) => room.id === id
     );
-    const hotelId = hotelQuery.data?.data?.data.find(
-      (hotel) => hotel.name === newObj.hotelName
-    );
-    newObj.hotel = { id: hotelId.id };
-    console.log(newObj);
-    setUpdateRoom({ ...newObj });
+    setUpdateRoom(roomToUpdate);
+  };
+
+  const handleClickAway = () => {
+    const newUpdateRoom = {
+      ...updateRoom,
+      roomFeatures: updateRoom.roomFeatures?.map(
+        (elemnent) => `${elemnent.id}`
+      ),
+    };
+
+    if (Object.keys(newUpdateRoom).length > 0) {
+      updateRoomFunc(newUpdateRoom).then((response) => {
+        if (response.status === 200) {
+          queryClient.invalidateQueries("rooms").then(() => {});
+        }
+      });
+      setUpdateRoom({});
+    }
   };
 
   return (
@@ -265,7 +283,7 @@ function Room() {
         </div>
       </div>
       <div className="rooms">
-        <ClickAwayListener onClickAway={() => setUpdateRoom({})}>
+        <ClickAwayListener onClickAway={handleClickAway}>
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
@@ -284,6 +302,12 @@ function Room() {
                   >
                     {dataRoom.map((data) => (
                       <TableCell key={`tablecell${data.dbName}`}>
+                        <span onClick={handleDeleteButton} id={room.id}>
+                          {data.dbName === "actions" && (
+                            <FontAwesomeIcon icon={faTrash} />
+                          )}
+                        </span>
+
                         {updateRoom.id === room.id && data.type === "text" ? (
                           <TextField
                             id="outlined-basic"
@@ -306,12 +330,12 @@ function Room() {
                             name={data.dbName}
                             required
                             value={updateRoom[data.dbName]?.id || ""}
-                            onChange={(e) =>
+                            onChange={(e) => {
                               setUpdateRoom({
                                 ...updateRoom,
                                 [data.dbName]: { id: e.target.value },
-                              })
-                            }
+                              });
+                            }}
                           >
                             <option value="" disabled>
                               {data.selectText}
@@ -335,6 +359,41 @@ function Room() {
                                 ))
                               : "error"}
                           </select>
+                        ) : updateRoom.id === room.id &&
+                          data.type === "number" ? (
+                          <TextField
+                            id="outlined-basic"
+                            variant="standard"
+                            name={data.dbName}
+                            className={`${
+                              updateRoom.id === room.id ? "update" : ""
+                            }`}
+                            value={updateRoom[data.dbName]}
+                            onChange={(event) => {
+                              setUpdateRoom({
+                                ...updateRoom,
+                                [data.dbName]: event.target.value,
+                              });
+                            }}
+                          />
+                        ) : updateRoom.id === room.id &&
+                          data.type === "date" ? (
+                          <TextField
+                            id="outlined-basic"
+                            variant="standard"
+                            name={data.dbName}
+                            type="date"
+                            className={`${
+                              updateRoom.id === room.id ? "update" : ""
+                            }`}
+                            value={updateRoom[data.dbName]}
+                            onChange={(event) => {
+                              setUpdateRoom({
+                                ...updateRoom,
+                                [data.dbName]: event.target.value,
+                              });
+                            }}
+                          />
                         ) : updateRoom.id === room.id &&
                           data.type === "checkbox" ? (
                           roomFeatureQuery.data?.data?.data.map(
