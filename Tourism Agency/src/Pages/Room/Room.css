@@ -122,3 +122,7 @@ input[type="checkbox"] + label::before {
 input[type="checkbox"] + label:hover::before {
   color: #555; /* Hover rengi */
 }
+
+.update {
+  background-color: hotpink;
+}
