@@ -1,15 +1,84 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getHotels, addHotel, deleteHotel } from "../../API/Hotel";
+import {
+  getHotels,
+  addHotel,
+  deleteHotel,
+  updateHotelFunc,
+} from "../../API/Hotel";
 import { getHostels } from "../../API/Hostel";
 import { getFacilities } from "../../API/Facility";
 import { useState } from "react";
 import "./Hotel.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { ClickAwayListener } from "@mui/base/ClickAwayListener";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
 
 function Hotel() {
-  const queryClient = useQueryClient();
+  const dataHotel = [
+    {
+      siteName: "Name",
+      dbName: "name",
+      type: "text",
+    },
+    {
+      siteName: "City",
+      dbName: "city",
+      type: "text",
+    },
+    {
+      siteName: "Location",
+      dbName: "loc",
+      type: "text",
+    },
+    {
+      siteName: "Address",
+      dbName: "address",
+      type: "text",
+    },
+    {
+      siteName: "Phone",
+      dbName: "phone",
+      type: "text",
+    },
+    {
+      siteName: "Email",
+      dbName: "email",
+      type: "text",
+    },
+    {
+      siteName: "Star",
+      dbName: "star",
+      type: "number",
+    },
+    {
+      siteName: "Hostels",
+      dbName: "hostels.name",
+      type: "checkbox",
+      options: "hostelQuery",
+    },
+    {
+      siteName: "Facilities",
+      dbName: "facilities.name",
+      type: "checkbox",
+      options: "facilityQuery",
+    },
+    {
+      siteName: "Actions",
+      dbName: "actions",
+      type: "icon",
+    },
+  ];
 
+  const queryClient = useQueryClient();
+  const [updateHotel, setUpdateHotel] = useState({});
   const [newHotel, setNewHotel] = useState({
     name: "",
     city: "",
@@ -96,12 +165,46 @@ function Hotel() {
   };
 
   const handleDeleteButton = (event) => {
+    event.stopPropagation();
     const id = event.currentTarget.id;
     deleteHotel(id).then((response) => {
       if (response.status === 200) {
         queryClient.invalidateQueries("hotels").then(() => {});
       }
     });
+  };
+
+  const handleUpdateBtn = (id) => {
+    if (Object.keys(updateHotel).length > 0) {
+      return;
+    } else {
+      const hotelToUpdate = hotelQuery.data?.data?.data.find(
+        (hotel) => hotel.id === id
+      );
+
+      const updateHostels = hotelToUpdate.hostels.map((hostel) => hostel.id);
+      const updateFacilities = hotelToUpdate.facilities.map(
+        (facilities) => facilities.id
+      );
+
+      setUpdateHotel({
+        ...hotelToUpdate,
+        hostels: updateHostels,
+        facilities: updateFacilities,
+      });
+    }
+  };
+
+  const handleClickAway = () => {
+    console.log(updateHotel);
+    if (Object.keys(updateHotel).length > 0) {
+      updateHotelFunc(updateHotel).then((response) => {
+        if (response.status === 200) {
+          queryClient.invalidateQueries("hotels").then(() => {});
+        }
+      });
+      setUpdateHotel({});
+    }
   };
 
   return (
@@ -188,42 +291,139 @@ function Hotel() {
         <button onClick={handleAddButton}>Add</button>
       </div>
       <div className="hotels">
-        {hotelQuery.data?.data?.data.map((hotel) => (
-          <div key={hotel.id} className="hotel">
-            <div className="hotel-info">
-              <span>Name: {hotel.name}</span>
-              <span>City: {hotel.city}</span>
-              <span>Location: {hotel.loc}</span>
-              <span>Address: {hotel.address}</span>
-              <span>Phone: {hotel.phone}</span>
-              <span>Email: {hotel.email}</span>
-              <span>Star: {hotel.star}</span>
-            </div>
-            {hotel.hostels && (
-              <div className="hostels">
-                <h4>Hostels:</h4>
-                {hotel.hostels.map((hostel, index) => (
-                  <div key={index} className="hostel">
-                    <span>{hostel.name}</span>
-                  </div>
+        <ClickAwayListener onClickAway={handleClickAway}>
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  {dataHotel.map((data) => (
+                    <TableCell key={data.dbName}>{data.siteName}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {hotelQuery?.data?.data?.data.map((hotel) => (
+                  <TableRow
+                    key={hotel.id}
+                    onClick={() => handleUpdateBtn(hotel.id)}
+                    id={hotel.id}
+                  >
+                    {dataHotel?.map((data) => (
+                      <TableCell key={`tablecell${data.dbName}`}>
+                        {data.dbName === "actions" && (
+                          <span onClick={handleDeleteButton} id={hotel.id}>
+                            <FontAwesomeIcon icon={faTrash} />
+                          </span>
+                        )}
+                        {updateHotel.id === hotel.id && data.type === "text" ? (
+                          <TextField
+                            id="outlined-basic"
+                            variant="standard"
+                            name={data.dbName}
+                            className={`${
+                              updateHotel.id === hotel.id ? "update" : ""
+                            }`}
+                            value={updateHotel[data.dbName]}
+                            onChange={(event) => {
+                              setUpdateHotel({
+                                ...updateHotel,
+                                [data.dbName]: event.target.value,
+                              });
+                            }}
+                          />
+                        ) : updateHotel.id === hotel.id &&
+                          data.type === "checkbox" ? (
+                          data.options === "hostelQuery" ? (
+                            hostelQuery?.data?.data?.data.map((hostel) => (
+                              <div key={hostel.id}>
+                                <input
+                                  type="checkbox"
+                                  checked={updateHotel.hostels.find(
+                                    (hostelH) => hostelH === hostel.id
+                                  )}
+                                  name="hostels"
+                                  value={hostel.id}
+                                  onChange={(event) => {
+                                    if (event.target.checked) {
+                                      setUpdateHotel({
+                                        ...updateHotel,
+                                        hostels: [
+                                          ...updateHotel.hostels,
+                                          event.target.value,
+                                        ],
+                                      });
+                                    } else {
+                                      const newValue = parseInt(
+                                        event.target.value
+                                      );
+                                      setUpdateHotel({
+                                        ...updateHotel,
+                                        hostels: updateHotel.hostels.filter(
+                                          (hostel) => hostel !== newValue
+                                        ),
+                                      });
+                                    }
+                                  }}
+                                />
+                                <label>{hostel.name}</label>
+                              </div>
+                            ))
+                          ) : (
+                            facilityQuery?.data?.data?.data.map((facility) => (
+                              <div key={facility.id}>
+                                <input
+                                  type="checkbox"
+                                  checked={updateHotel.facilities.find(
+                                    (hostelF) => hostelF === facility.id
+                                  )}
+                                  name="facilities"
+                                  value={facility.id}
+                                  onChange={(event) => {
+                                    if (event.target.checked) {
+                                      setUpdateHotel({
+                                        ...updateHotel,
+                                        facilities: [
+                                          ...updateHotel.facilities,
+                                          event.target.value,
+                                        ],
+                                      });
+                                    } else {
+                                      const newValue = parseInt(
+                                        event.target.value
+                                      );
+                                      setUpdateHotel({
+                                        ...updateHotel,
+                                        facilities:
+                                          updateHotel.facilities.filter(
+                                            (facility) => facility !== newValue
+                                          ),
+                                      });
+                                    }
+                                  }}
+                                />
+                                <label>{facility.name}</label>
+                              </div>
+                            ))
+                          )
+                        ) : data.dbName === "hostels.name" ? (
+                          hotel.hostels.map((hostel) => (
+                            <span key={hostel.id}>{hostel.name}</span>
+                          ))
+                        ) : data.dbName === "facilities.name" ? (
+                          hotel.facilities.map((facilities) => (
+                            <span key={facilities.id}>{facilities.name}</span>
+                          ))
+                        ) : (
+                          hotel[data.dbName]
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
                 ))}
-              </div>
-            )}
-            {hotel.facilities && (
-              <div className="facilities">
-                <h4>Facilities:</h4>
-                {hotel.facilities.map((facility, index) => (
-                  <div key={index} className="facility">
-                    <span>{facility.name}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <span onClick={handleDeleteButton} id={hotel.id}>
-              <FontAwesomeIcon icon={faTrash} className="delete-icon" />
-            </span>
-          </div>
-        ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </ClickAwayListener>
       </div>
       <div className="secondary-container">
         <div className="hostels-container">

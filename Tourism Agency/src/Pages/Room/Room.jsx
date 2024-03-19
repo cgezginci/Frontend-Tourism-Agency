@@ -16,7 +16,6 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Tab } from "@mui/material";
 
 function Room() {
   const dataRoom = [
@@ -26,6 +25,7 @@ function Room() {
       type: "select",
       options: "roomTypeQuery",
       selectText: "Select a room type",
+      selectName: "roomType",
     },
     { siteName: "Stock", dbName: "stock", type: "number" },
     { siteName: "Square Meter", dbName: "squareMeter", type: "number" },
@@ -46,6 +46,7 @@ function Room() {
       type: "select",
       selectText: "Select a hotel",
       options: "hotelQuery",
+      selectName: "hotel",
     },
     {
       siteName: "Actions",
@@ -99,6 +100,7 @@ function Room() {
       if (response.status === 201) {
         queryClient.invalidateQueries("rooms").then(() => {});
       }
+      console.log(newRoom);
       setNewRoom({
         roomType: {},
         stock: 0,
@@ -146,22 +148,30 @@ function Room() {
   };
 
   const handleUpdateBtn = (id) => {
-    const roomToUpdate = roomQuery.data?.data?.data.find(
-      (room) => room.id === id
-    );
-    setUpdateRoom(roomToUpdate);
+    if (Object.keys(updateRoom).length > 0) {
+      return;
+    } else {
+      const roomToUpdate = roomQuery.data?.data?.data.find(
+        (room) => room.id === id
+      );
+      const updateHotel = hotelQuery.data?.data?.data.find(
+        (hotel) => hotel.name === roomToUpdate.hotelName
+      );
+      const updateRoomFeatures = roomToUpdate.roomFeatures.map(
+        (roomFeature) => roomFeature.id
+      );
+      setUpdateRoom({
+        ...roomToUpdate,
+        hotel: { id: updateHotel.id },
+        roomFeatures: updateRoomFeatures,
+      });
+    }
   };
 
   const handleClickAway = () => {
-    const newUpdateRoom = {
-      ...updateRoom,
-      roomFeatures: updateRoom.roomFeatures?.map(
-        (elemnent) => `${elemnent.id}`
-      ),
-    };
-
-    if (Object.keys(newUpdateRoom).length > 0) {
-      updateRoomFunc(newUpdateRoom).then((response) => {
+    console.log(updateRoom);
+    if (Object.keys(updateRoom).length > 0) {
+      updateRoomFunc(updateRoom).then((response) => {
         if (response.status === 200) {
           queryClient.invalidateQueries("rooms").then(() => {});
         }
@@ -329,12 +339,14 @@ function Room() {
                           <select
                             name={data.dbName}
                             required
-                            value={updateRoom[data.dbName]?.id || ""}
+                            value={updateRoom[data.selectName]?.id}
                             onChange={(e) => {
-                              setUpdateRoom({
-                                ...updateRoom,
-                                [data.dbName]: { id: e.target.value },
-                              });
+                              const newObj = {
+                                [data.selectName]: { id: e.target.value },
+                              };
+                              console.log(newObj);
+                              setUpdateRoom((prev) => ({ ...prev, ...newObj }));
+                              console.log(updateRoom);
                             }}
                           >
                             <option value="" disabled>
@@ -402,7 +414,7 @@ function Room() {
                                 <input
                                   type="checkbox"
                                   checked={updateRoom.roomFeatures.find(
-                                    (roomF) => roomF.id === roomFeature.id
+                                    (roomF) => roomF === roomFeature.id
                                   )}
                                   name="facilities"
                                   value={roomFeature.id}
@@ -412,16 +424,18 @@ function Room() {
                                         ...updateRoom,
                                         roomFeatures: [
                                           ...updateRoom.roomFeatures,
-                                          { id: event.target.value },
+                                          event.target.value,
                                         ],
                                       });
                                     } else {
+                                      const newValue = parseInt(
+                                        event.target.value
+                                      );
                                       setUpdateRoom({
                                         ...updateRoom,
                                         roomFeatures:
                                           updateRoom.roomFeatures.filter(
-                                            (facility) =>
-                                              facility.id !== event.target.value
+                                            (facility) => facility !== newValue
                                           ),
                                       });
                                     }

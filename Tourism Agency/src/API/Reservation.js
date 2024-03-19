@@ -17,3 +17,11 @@ export const deleteReservation = async (id) => {
   const data = await axios.delete(`http://localhost:8080/v1/reservation/${id}`);
   return data;
 };
+
+export const updateReservationFunc = async (reservation) => {
+  const data = await axios.put(
+    "http://localhost:8080/v1/reservation",
+    reservation
+  );
+  return data;
+};
