@@ -79,6 +79,7 @@ function Reservation() {
       type: "select",
       selectText: "Select a room",
       options: "roomQuery",
+      selectName: "room",
     },
     {
       siteName: "Room Stock",
@@ -293,10 +294,10 @@ function Reservation() {
                           <select
                             name={data.dbName}
                             required
-                            value={updateReservation[data.dbName]?.id}
+                            value={updateReservation[data.selectName]?.id}
                             onChange={(e) => {
                               const newObj = {
-                                [data.dbName]: { id: e.target.value },
+                                [data.selectName]: { id: e.target.value },
                               };
                               console.log(newObj);
                               setUpdateReservation((prev) => ({
