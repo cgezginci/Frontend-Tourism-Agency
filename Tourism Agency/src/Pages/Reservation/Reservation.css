@@ -5,61 +5,8 @@
   gap: 20px;
 }
 
-.reservation {
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-}
-
-.reservation-info {
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.reservation-info span {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.delete-icon {
-  right: 10px;
-  color: #e74c3c;
-  cursor: pointer;
-}
-
-.room-features {
-  margin-top: 10px;
-  display: flex;
-}
-
-.room-feature {
-  display: inline-block;
-  background-color: #e0e0e0;
-  color: #333;
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin-right: 5px;
-}
-.add-reservation-container {
-  margin-top: 20px;
-}
-
-.add-reservation-container h1 {
-  font-size: 24px;
-  margin-bottom: 15px;
-}
-
-.add-reservation-container input[type="text"],
-.add-reservation-container input[type="date"],
-.add-reservation-container input[type="number"],
-.add-reservation-container select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+.res-main {
+  position: relative;
 }
 
 .add-reservation-container button {
@@ -70,8 +17,80 @@
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  margin-top: 10px;
+  position: absolute;
+  right: 155px;
 }
 
 .add-reservation-container button:hover {
   background-color: #0056b3;
+}
+
+.res-modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 450px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.res-modal-container h2 {
+  margin-top: 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.res-modal-container .buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.res-modal-container .buttons button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.res-modal-container .buttons .add-button {
+  background-color: #007bff;
+  color: #fff;
+  width: 70px;
+}
+
+.res-modal-container .buttons .add-button:hover {
+  background-color: #0056b3;
+}
+
+.res-modal-container .buttons .close-button {
+  background-color: #f22d05;
+  color: #fff;
+  width: 70px;
+}
+
+.res-modal-container .buttons .close-button:hover {
+  background-color: #970404;
+}
+
+.res-modal-container input[type="text"],
+.res-modal-container input[type="number"],
+.res-modal-container input[type="date"],
+.res-modal-container select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  height: 40px;
+}
+
+.res-box {
+  margin: 0 auto;
+  width: 80%;
+  margin-top: 50px;
 }

@@ -19,6 +19,7 @@ function App() {
         <Route path="/room" element={<Room />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/gallery/:selectMenu" element={<Gallery />} />
       </Routes>
     </>
   );

@@ -34,13 +34,15 @@
 }
 
 .gallery-item {
+  position: relative;
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
   border-radius: 8px;
-  padding: 5px;
   text-align: center;
   transition: transform 0.3s ease;
   width: 350px;
+  display: flex;
+  flex-direction: column;
 }
 
 .gallery-item:hover {
@@ -72,7 +74,38 @@
 .gallery-item p.price {
   font-weight: bold;
   color: #ff5722;
+  width: 100%;
+  font-size: 1.1em;
 }
 .icon {
   width: 20px;
+}
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  text-align: center;
+  padding: 4px;
+  border-radius: 4px; /* Kenarları yuvarlak yapar */
+  font-size: 14px; /* Yazı boyutunu ayarlar */
+  font-weight: bold; /* Kalın yazı tipini belirler */
+
+  background-color: #f9bc0d;
+  color: #090909;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hafif bir gölgelendirme ekler */
+}
+
+.item-content {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.item-content p {
+  width: 40%;
+}
+
+.stars {
+  width: 40%;
 }

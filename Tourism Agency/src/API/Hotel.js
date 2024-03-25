@@ -19,3 +19,8 @@ export const updateHotelFunc = async (hotel) => {
   const data = await axios.put("http://localhost:8080/v1/hotel", hotel);
   return data;
 };
+
+export const getHotelByName = async (name) => {
+  const data = await axios.get(`http://localhost:8080/v1/hotel/${name}`);
+  return data;
+};

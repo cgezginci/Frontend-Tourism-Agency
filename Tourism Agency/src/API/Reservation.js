@@ -25,3 +25,13 @@ export const updateReservationFunc = async (reservation) => {
   );
   return data;
 };
+
+export const getReservationByPersonNameAndSurname = async (
+  personName,
+  personSurname
+) => {
+  const data = await axios.get(
+    `http://localhost:8080/v1/reservation/filter/${personName}/${personSurname}`
+  );
+  return data;
+};
