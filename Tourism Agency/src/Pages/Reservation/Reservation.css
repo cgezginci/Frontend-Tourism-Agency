@@ -9,6 +9,12 @@
   position: relative;
 }
 
+.res-main h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
 .add-reservation-container button {
   background-color: #007bff;
   color: #fff;
@@ -92,5 +98,44 @@
 .res-box {
   margin: 0 auto;
   width: 80%;
-  margin-top: 50px;
+  margin-top: 80px;
+}
+
+.res-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: absolute;
+  top: 70px;
+  left: 155px;
+  gap: 10px;
+}
+
+.res-search input[type="text"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.res-search button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.res-search button:hover {
+  background-color: #0056b3;
+}
+
+.delete-icon {
+  cursor: pointer;
+}
+
+.delete-icon:hover {
+  color: red;
 }

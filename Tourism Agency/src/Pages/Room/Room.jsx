@@ -122,13 +122,13 @@ function Room() {
       console.log(newRoom);
       setNewRoom({
         roomType: {},
-        stock: 0,
-        squareMeter: 0,
+        stock: "",
+        squareMeter: "",
         personType: "",
-        bedNumber: 0,
+        bedNumber: "",
         periodStart: "",
         periodEnd: "",
-        price: 0,
+        price: "",
         roomFeatures: [],
         hotel: {},
       });
@@ -219,7 +219,7 @@ function Room() {
 
   const handleDateSearchBtn = () => {
     getRoomByDates(search.startDate, search.endDate).then((response) => {
-      if (response.data.success) {
+      if (response.data.data.length > 0) {
         setFilteredRooms(response.data.data);
       } else {
         alert("Belirtilen tarihler arasında uygun oda bulunamadı.");
@@ -253,7 +253,7 @@ function Room() {
 
   const handleHotelNameSearchBtn = () => {
     getRoomByHotelName(searchRoom.hotelName).then((response) => {
-      if (response.data.success) {
+      if (response.data.data.length > 0) {
         setShowRooms(response.data.data);
         setFilteredHotels(response.data.data);
       } else {
@@ -272,6 +272,7 @@ function Room() {
 
   return (
     <div className="room-container">
+      <h1>Rooms</h1>
       <div className="add-room-container">
         <button onClick={handleModalOpen}>Add Room</button>
       </div>
@@ -423,6 +424,7 @@ function Room() {
               <input
                 type="text"
                 name="hotelName"
+                placeholder="Hotel Name"
                 value={searchRoom.hotelName}
                 onChange={handleHotelNameSearch}
               />
@@ -431,7 +433,6 @@ function Room() {
             <button onClick={handleDateReset}>Reset</button>
           </div>
 
-          <h1>Rooms</h1>
           <ClickAwayListener onClickAway={handleClickAway}>
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
@@ -451,7 +452,11 @@ function Room() {
                     >
                       {dataRoom.map((data) => (
                         <TableCell key={`tablecell${data.dbName}`}>
-                          <span onClick={handleDeleteButton} id={room.id}>
+                          <span
+                            className="delete-icon"
+                            onClick={handleDeleteButton}
+                            id={room.id}
+                          >
                             {data.dbName === "actions" && (
                               <FontAwesomeIcon icon={faTrash} />
                             )}
@@ -590,7 +595,10 @@ function Room() {
                             )
                           ) : data.dbName === "roomFeatures.name" ? (
                             room.roomFeatures.map((roomFeature) => (
-                              <span key={roomFeature.id}>
+                              <span
+                                className="feature-span"
+                                key={roomFeature.id}
+                              >
                                 {roomFeature.name}
                               </span>
                             ))

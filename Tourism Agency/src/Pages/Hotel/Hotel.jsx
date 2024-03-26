@@ -131,7 +131,7 @@ function Hotel() {
       address: "",
       phone: "",
       email: "",
-      star: 0,
+      star: "",
       hostels: [],
       facilities: [],
     });
@@ -233,7 +233,7 @@ function Hotel() {
 
   const handleSearchButton = () => {
     getHotelByName(searchHotel).then((response) => {
-      if (response.data.success) {
+      if (response.data.data.length > 0) {
         setShowHotel(response.data.data);
         setFilterHotel(response.data.data);
       } else {
@@ -392,12 +392,33 @@ function Hotel() {
                       {dataHotel?.map((data) => (
                         <TableCell key={`tablecell${data.dbName}`}>
                           {data.dbName === "actions" && (
-                            <span onClick={handleDeleteButton} id={hotel.id}>
+                            <span
+                              className="delete-icon"
+                              onClick={handleDeleteButton}
+                              id={hotel.id}
+                            >
                               <FontAwesomeIcon icon={faTrash} />
                             </span>
                           )}
                           {updateHotel.id === hotel.id &&
                           data.type === "text" ? (
+                            <TextField
+                              id="outlined-basic"
+                              variant="standard"
+                              name={data.dbName}
+                              className={`${
+                                updateHotel.id === hotel.id ? "update" : ""
+                              }`}
+                              value={updateHotel[data.dbName]}
+                              onChange={(event) => {
+                                setUpdateHotel({
+                                  ...updateHotel,
+                                  [data.dbName]: event.target.value,
+                                });
+                              }}
+                            />
+                          ) : updateHotel.id === hotel.id &&
+                            data.type === "number" ? (
                             <TextField
                               id="outlined-basic"
                               variant="standard"
@@ -492,11 +513,18 @@ function Hotel() {
                             )
                           ) : data.dbName === "hostels.name" ? (
                             hotel.hostels.map((hostel) => (
-                              <span key={hostel.id}>{hostel.name}</span>
+                              <span className="hostel-span" key={hostel.id}>
+                                {hostel.name}
+                              </span>
                             ))
                           ) : data.dbName === "facilities.name" ? (
                             hotel.facilities.map((facilities) => (
-                              <span key={facilities.id}>{facilities.name}</span>
+                              <span
+                                className="facility-span"
+                                key={facilities.id}
+                              >
+                                {facilities.name}
+                              </span>
                             ))
                           ) : (
                             hotel[data.dbName]

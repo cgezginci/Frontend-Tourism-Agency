@@ -137,7 +137,7 @@ function Reservation() {
         personTc: "",
         startDate: "",
         endDate: "",
-        personCount: 0,
+        personCount: "",
         room: {},
       });
       setIsModalOpen(false);
@@ -202,7 +202,7 @@ function Reservation() {
       search.personName,
       search.personSurname
     ).then((response) => {
-      if (response.data.success) {
+      if (response.data.data.length > 0) {
         setFilteredReservations(response.data.data);
       } else {
         alert("Böyle bir rezervasyon bulunamadı");
@@ -228,6 +228,7 @@ function Reservation() {
 
   return (
     <div className="res-main">
+      <h1>Reservations</h1>
       <div className="add-reservation-container">
         <button onClick={handleModalOpen}>+ Add Reservation</button>
       </div>
@@ -321,7 +322,7 @@ function Reservation() {
       </Modal>
       <div className="res-box">
         <div className="reservations">
-          <div>
+          <div className="res-search">
             <input
               type="text"
               placeholder="Person Name"
@@ -339,7 +340,7 @@ function Reservation() {
             <button onClick={handleSearchButton}>Search</button>
             <button onClick={handleReset}>Reset</button>
           </div>
-          <h1>Reservations</h1>
+
           <ClickAwayListener onClickAway={handleClickAway}>
             <TableContainer component={Paper}>
               <Table aria-label="simple table">
@@ -360,6 +361,7 @@ function Reservation() {
                       {dataReservation.map((data) => (
                         <TableCell key={`tablecell${data.dbName}`}>
                           <span
+                            className="delete-icon"
                             onClick={handleDeleteButton}
                             id={reservation.id}
                           >
