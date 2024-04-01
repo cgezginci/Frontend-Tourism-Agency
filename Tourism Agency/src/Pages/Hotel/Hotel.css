@@ -54,10 +54,10 @@
   margin-bottom: 15px;
 }
 
-.add-hotel-container input[type="text"],
-.add-hotel-container input[type="date"],
-.add-hotel-container input[type="number"],
-.add-hotel-container select {
+.hotel-modal-container input[type="text"],
+.hotel-modal-container input[type="date"],
+.hotel-modal-container input[type="number"],
+.hotel-modal-container select {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
