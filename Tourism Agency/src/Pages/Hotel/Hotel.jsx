@@ -191,8 +191,8 @@ function Hotel() {
         (hotel) => hotel.id === id
       );
 
-      const updateHostels = hotelToUpdate.hostels.map((hostel) => hostel.id);
-      const updateFacilities = hotelToUpdate.facilities.map(
+      const updateHostels = hotelToUpdate?.hostels.map((hostel) => hostel.id);
+      const updateFacilities = hotelToUpdate?.facilities.map(
         (facilities) => facilities.id
       );
 
@@ -321,7 +321,7 @@ function Hotel() {
             />
             <div>
               <h4>Hostels</h4>
-              {hostelQuery.data?.data?.data.map((hostel) => (
+              {hostelQuery?.data?.data?.data?.map((hostel) => (
                 <div key={hostel.id}>
                   <input
                     type="checkbox"
@@ -335,7 +335,7 @@ function Hotel() {
             </div>
             <div>
               <h4>Facilities</h4>
-              {facilityQuery.data?.data?.data.map((facility) => (
+              {facilityQuery?.data?.data?.data?.map((facility) => (
                 <div key={facility.id}>
                   <input
                     type="checkbox"
@@ -377,7 +377,7 @@ function Hotel() {
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    {dataHotel.map((data) => (
+                    {dataHotel?.map((data) => (
                       <TableCell key={data.dbName}>{data.siteName}</TableCell>
                     ))}
                   </TableRow>
@@ -543,7 +543,7 @@ function Hotel() {
       <div className="secondary-container">
         <div className="hostels-container">
           <h2>Hostels</h2>
-          {hostelQuery.data?.data?.data.map((hostel) => (
+          {hostelQuery.data?.data?.data?.map((hostel) => (
             <div key={hostel.id} className="hostel-container">
               <div className="hostel-info">
                 <span className="hostel-name">{hostel.name}</span>
@@ -553,7 +553,7 @@ function Hotel() {
         </div>
         <div className="facilities-container">
           <h2>Facilities</h2>
-          {facilityQuery.data?.data?.data.map((facility) => (
+          {facilityQuery.data?.data?.data?.map((facility) => (
             <div key={facility.id} className="facility-container">
               <div className="facility-info">
                 <span className="facility-name">{facility.name}</span>
